@@ -10,7 +10,7 @@ FactoryBot.define do
   sequence :avatar do |n|
     "#{:first_name}#{n}.jpg"
   end
-  sequence :type do |n|
-    "developer"
+  sequence :type do |_n|
+    'developer'
   end
 end
