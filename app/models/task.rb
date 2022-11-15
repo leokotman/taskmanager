@@ -1,4 +1,11 @@
 class Task < ApplicationRecord
+  belongs_to :author, class_name: 'User'
+  belongs_to :assignee, class_name: 'User', optional: true
+
+  validates :name, presence: true
+  validates :description, presence: true, length: { maximum: 500 }
+  validates :author, presence: true
+
   state_machine :state, initial: :new_task do
     state :in_development
     state :archived
@@ -31,11 +38,4 @@ class Task < ApplicationRecord
       transition [:new_task, :released] => :archived
     end
   end
-
-  belongs_to :author, class_name: 'User'
-  belongs_to :assignee, class_name: 'User', optional: true
-
-  validates :name, presence: true
-  validates :description, presence: true, length: { maximum: 500 }
-  validates :author, presence: true
 end
