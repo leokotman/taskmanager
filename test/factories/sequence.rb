@@ -9,3 +9,4 @@ FactoryBot.define do
     "#{:first_name}#{n}.jpg"
   end
 end
+
