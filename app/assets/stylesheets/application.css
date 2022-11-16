@@ -1,4 +1,4 @@
-@import '/node_modules/material-design-lite/material.min.css';
+//= require material-design-lite/material.min.css
 
 body {
   min-height: 100vh;
