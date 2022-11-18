@@ -29,6 +29,14 @@ class Api::V1::TasksController < Api::V1::ApplicationController
     respond_with(task, serializer: :TaskSerializer)
   end
 
+  # DELETE /api/v1/tasks/:id
+  def destroy
+    task = Task.find(params[:id])
+    task.destroy
+
+    respond_with(task)
+  end
+
   private
 
   def task_params
