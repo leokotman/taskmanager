@@ -21,6 +21,14 @@ class Api::V1::TasksController < Api::V1::ApplicationController
     respond_with(task, serializer: :TaskSerializer, location: nil)
   end
 
+  # PUT /api/v1/tasks/:id или PATCH /api/v1/tasks/:id
+  def update
+    task = Task.find(params[:id])
+    task.update(task_params)
+
+    respond_with(task, serializer: :TaskSerializer)
+  end
+
   private
 
   def task_params
