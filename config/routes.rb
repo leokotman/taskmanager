@@ -8,4 +8,8 @@ Rails.application.routes.draw do
     resource :session, only: [:new, :create, :destroy]
     resource :developers, only: [:new, :create]
   end
+
+  namespace :admin do
+    resources :users
+  end
 end
