@@ -29,6 +29,7 @@ gem 'kaminari'
 gem 'ransack'
 gem 'responders'
 gem 'active_model_serializers'
+gem 'webpacker-react', '~> 0.3.2'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
