@@ -2,31 +2,36 @@
   "parser": "@babel/eslint-parser",
   "extends": ["airbnb", "prettier", "eslint:recommended"],
   "plugins": ["react", "filenames", "prettier"],
-
   "globals": {
     "gon": true,
     "__CLIENT__": true,
     "__SERVER__": true
   },
-
   "settings": {
     "import/extensions": [".js", ".jsx"]
   },
-
   "rules": {
     "prettier/prettier": [
       2,
       {
         "singleQuote": true,
         "trailingComma": "all",
-        "printWidth": 128
+        "printWidth": 120
       }
     ],
     "no-param-reassign": [
       "error",
-      { "props": true, "ignorePropertyModificationsFor": ["state"] }
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["state"]
+      }
     ],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx"]
+      }
+    ],
     "import/no-unresolved": ["off"],
     "import/no-absolute-path": ["off"],
     "import/order": ["off"],
@@ -42,20 +47,18 @@
     "react/prop-types": [
       2,
       {
-        "ignore": [
-          "classes",
-          "match",
-          "dictionaries",
-          "errors",
-          "history",
-          "children",
-          "location"
-        ]
+        "ignore": ["classes", "match", "dictionaries", "errors", "history", "children", "location"]
       }
     ],
     "no-debugger": 1,
     "react/destructuring-assignment": 0,
-    "react/static-property-placement": 0
+    "react/static-property-placement": 0,
+    "max-len": [
+      "warn",
+      {
+        "code": 120
+      }
+    ]
   },
   "parserOptions": {
     "ecmaFeatures": {
