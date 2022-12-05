@@ -40,7 +40,9 @@ export default {
     return axios
       .get(url, {
         params: decamelize(params),
-        paramsSerializer: (parameters) => qs.stringify(parameters, { encode: false }),
+        paramsSerializer: {
+          encode: (parameters) => qs.stringify(parameters, { encode: false }),
+        },
       })
       .then(camelize);
   },
