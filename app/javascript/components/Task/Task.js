@@ -10,7 +10,7 @@ const Task = (props) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card variant="outlined" className={classes.root}>
       <CardHeader title={task.name} />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
@@ -22,7 +22,7 @@ const Task = (props) => {
 };
 
 Task.propTypes = {
-  task: PropTypes.shape().isRequired,
+  task: PropTypes.arrayOf.isRequired,
 };
 
 export default Task;

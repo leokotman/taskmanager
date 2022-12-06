@@ -18,13 +18,14 @@ function headers() {
 }
 
 axios.defaults.headers.post = headers();
-axios.defaults.headers.put = headers();
+axios.defaults.headers.patch = headers();
 axios.defaults.headers.delete = headers();
 axios.interceptors.response.use(null, (error) => {
   if (error.response.status === 422) {
     const {
       response: { data: errors },
     } = error;
+    console.log(error.response);
     return Promise.reject(camelize(errors.errors));
   }
 
@@ -53,10 +54,13 @@ export default {
     return axios.post(url, body).then(camelize);
   },
 
-  put(url, json) {
+  patch(url, json) {
     const body = decamelize(json);
 
-    return axios.put(url, body).then(camelize);
+    return axios
+      .patch(url, body)
+      .then(camelize)
+      .catch((err) => err.message);
   },
 
   delete(url, params = {}) {

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Board from '@asseinfo/react-kanban';
+import Board, { moveCard } from '@asseinfo/react-kanban';
 import { propOr } from 'ramda';
 
 import Task from 'components/Task';
+import ColumnHeader from 'components/ColumnHeader';
 import TasksRepository from 'repositories/TasksRepository';
 
 const STATES = [
@@ -38,7 +39,15 @@ const TaskBoard = () => {
     loadColumn(state, page, perPage).then(({ data }) => {
       setBoardCards((prevState) => ({
         ...prevState,
-        [state]: { cards: data.items, meta: data.meta },
+        [state]: { cards: data.items.filter((item) => item.state === state), meta: data.meta },
+      }));
+    });
+  };
+  const loadColumnMore = (state, page = 1, perPage = 10) => {
+    loadColumn(state, page, perPage).then(({ data }) => {
+      setBoardCards((prevState) => ({
+        ...prevState,
+        [state]: { cards: [...boardCards[state].cards, data.items], meta: data.meta },
       }));
     });
   };
@@ -59,10 +68,36 @@ const TaskBoard = () => {
 
     setBoard(boardToGenerate);
   };
+
+  const handleCardDragEnd = (task, source, destination) => {
+    const transition = task.transitions.find(({ to }) => destination.toColumnId === to);
+    if (!transition) {
+      return null;
+    }
+
+    return TasksRepository.update(task.id, { ...task, stateEvent: transition.event })
+      .then(() => {
+        loadColumn(destination.toColumnId);
+        loadColumn(source.fromColumnId);
+        setBoard(moveCard(board, source, destination));
+      })
+      .catch((error) => {
+        alert(`Move failed! ${error.message}`);
+      });
+  };
+
   useEffect(() => loadBoard(), []);
   useEffect(() => generateBoard(), [boardCards]);
 
-  return <Board renderCard={(card) => <Task task={card} key={card.id + card.state} />}>{board}</Board>;
+  return (
+    <Board
+      onCardDragEnd={handleCardDragEnd}
+      renderColumnHeader={(column) => <ColumnHeader column={column} onLoadMore={loadColumnMore} />}
+      renderCard={(card) => <Task task={card} key={`${card.id}_${card.state}`} />}
+    >
+      {board}
+    </Board>
+  );
 };
 
 export default TaskBoard;
