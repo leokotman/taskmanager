@@ -20,24 +20,20 @@ function headers() {
 axios.defaults.headers.post = headers();
 axios.defaults.headers.put = headers();
 axios.defaults.headers.delete = headers();
-axios.interceptors.response.use(
-  (result) => result,
-  (error) => {
-    if (error.response.status === 422) {
-      const {
-        response: { data: errors },
-      } = error;
-      console.log(error.response);
-      return Promise.reject(camelize(errors.errors));
-    }
+axios.interceptors.response.use(null, (error) => {
+  if (error.response.status === 422) {
+    const {
+      response: { data: errors },
+    } = error;
+    return Promise.reject(camelize(errors.errors));
+  }
 
-    if (error.response.status === 500) {
-      return Promise.reject(new Error('Something went wrong, please retry again'));
-    }
+  if (error.response.status === 500) {
+    return Promise.reject(new Error('Something went wrong, please retry again'));
+  }
 
-    return Promise.reject(error);
-  },
-);
+  return Promise.reject(error);
+});
 
 export default {
   get(url, params = {}) {
@@ -45,7 +41,7 @@ export default {
       .get(url, {
         params: decamelize(params),
         paramsSerializer: {
-          encode: (parameters) => qs.stringify(parameters, { encode: false }),
+          serialize: (parameters) => qs.stringify(parameters, { encode: false }),
         },
       })
       .then(camelize);
@@ -59,13 +55,8 @@ export default {
 
   put(url, json) {
     const body = decamelize(json);
-    console.log(url);
-    console.log(body);
 
-    return axios
-      .put(url, body)
-      .then(camelize)
-      .catch((err) => err.message);
+    return axios.put(url, body).then(camelize);
   },
 
   delete(url, params = {}) {

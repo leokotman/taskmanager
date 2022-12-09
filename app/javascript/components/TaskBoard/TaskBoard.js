@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Board, { moveCard } from '@asseinfo/react-kanban';
+import Board from '@asseinfo/react-kanban';
 import { propOr } from 'ramda';
 import { Fab } from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -7,6 +7,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import TaskForm from 'form/TaskForm';
 import Task from 'components/Task';
 import AddPopup from 'components/AddPopup';
+// import EditPopup from 'components/EditPopup';
 import ColumnHeader from 'components/ColumnHeader';
 import TasksRepository from 'repositories/TasksRepository';
 
@@ -24,6 +25,7 @@ const STATES = [
 const MODES = {
   ADD: 'add',
   NONE: 'none',
+  // EDIT: 'edit',
 };
 
 const initialBoard = {
@@ -39,6 +41,7 @@ const TaskBoard = () => {
   const [board, setBoard] = useState(initialBoard);
   const [boardCards, setBoardCards] = useState([]);
   const [mode, setMode] = useState(MODES.NONE);
+  // const [openedTaskId, setOpenedTaskId] = useState(null);
   const styles = useStyles();
 
   const loadColumn = (state, page, perPage) =>
@@ -51,7 +54,7 @@ const TaskBoard = () => {
     loadColumn(state, page, perPage).then(({ data }) => {
       setBoardCards((prevState) => ({
         ...prevState,
-        [state]: { cards: data.items.filter((item) => item.state === state), meta: data.meta },
+        [state]: { cards: data.items, meta: data.meta },
       }));
     });
   };
@@ -87,14 +90,12 @@ const TaskBoard = () => {
       return null;
     }
 
-    return TasksRepository.update(task.id, { ...task, stateEvent: transition.event })
+    return TasksRepository.update(task.id, { task: { stateEvent: transition.event } })
       .then(() => {
         loadColumnInitial(destination.toColumnId);
         loadColumnInitial(source.fromColumnId);
       })
       .catch((error) => {
-        console.log(destination.toColumnId);
-        console.log(source.fromColumnId);
         alert(`Move failed! ${error.message}`);
       });
   };
@@ -109,10 +110,21 @@ const TaskBoard = () => {
   const handleTaskCreate = (params) => {
     const attributes = TaskForm.attributesToSubmit(params);
     return TasksRepository.create(attributes).then(({ data: { task } }) => {
-      loadColumnInitial(task);
+      loadColumnInitial(task.state);
       handleClose();
     });
   };
+
+  // const loadTask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
+
+  // const handleTaskUpdate = (task) => {
+  //   const attributes = TaskForm.attributesToSubmit(task);
+
+  //   return TasksRepository.update(task.id, attributes).then(() => {
+  //     loadColumnInitial(task.state);
+  //     handleClose();
+  //   });
+  // };
 
   useEffect(() => loadBoard(), []);
   useEffect(() => generateBoard(), [boardCards]);
@@ -131,6 +143,15 @@ const TaskBoard = () => {
         <AddRoundedIcon />
       </Fab>
       {mode === MODES.ADD && <AddPopup onCardCreate={handleTaskCreate} onClose={handleClose} />}
+      {/* {mode === MODES.EDIT && (
+        <EditPopup
+          onCardLoad={loadTask}
+          // onCardDestroy={handleTaskDestroy}
+          // onCardUpdate={handleTaskUpdate}
+          onClose={handleClose}
+          cardId={openedTaskId}
+        />
+      )} */}
     </div>
   );
 };

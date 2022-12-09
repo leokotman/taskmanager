@@ -1,5 +1,5 @@
 import { apiV1TaskPath, apiV1TasksPath } from 'routes/apiRoutes';
-import FetchHelper from '../../utils/fetchHelper';
+import FetchHelper from 'utils/fetchHelper';
 
 export default {
   index(params) {
@@ -14,8 +14,6 @@ export default {
 
   update(id, task = {}) {
     const path = apiV1TaskPath(id);
-    console.log(path);
-    console.log(task);
     return FetchHelper.put(path, task);
   },
 

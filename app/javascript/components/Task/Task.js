@@ -22,7 +22,7 @@ const Task = (props) => {
 };
 
 Task.propTypes = {
-  task: PropTypes.arrayOf.isRequired,
+  task: PropTypes.shape().isRequired,
 };
 
 export default Task;
