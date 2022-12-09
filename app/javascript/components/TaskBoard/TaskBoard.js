@@ -4,7 +4,7 @@ import { propOr } from 'ramda';
 import { Fab } from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
-import TaskForm from 'form/TaskForm';
+import TaskForm from 'forms/TaskForm';
 import Task from 'components/Task';
 import AddPopup from 'components/AddPopup';
 // import EditPopup from 'components/EditPopup';
@@ -60,9 +60,13 @@ const TaskBoard = () => {
   };
   const loadColumnMore = (state, page = 1, perPage = 10) => {
     loadColumn(state, page, perPage).then(({ data }) => {
+      // console.log('data: ', data);
+      // console.log('page: ', page);
+      // console.log('perPage: ', perPage);
+      // console.log('boardCards[state]: ', boardCards[state]);
       setBoardCards((prevState) => ({
         ...prevState,
-        [state]: { cards: [...boardCards[state].cards, data.items], meta: data.meta },
+        [state]: { cards: data.items, meta: data.meta },
       }));
     });
   };
@@ -115,16 +119,16 @@ const TaskBoard = () => {
     });
   };
 
-  // const loadTask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
+  const loadTask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
 
-  // const handleTaskUpdate = (task) => {
-  //   const attributes = TaskForm.attributesToSubmit(task);
+  const handleTaskUpdate = (task) => {
+    const attributes = TaskForm.attributesToSubmit(task);
 
-  //   return TasksRepository.update(task.id, attributes).then(() => {
-  //     loadColumnInitial(task.state);
-  //     handleClose();
-  //   });
-  // };
+    return TasksRepository.update(task.id, attributes).then(() => {
+      loadColumnInitial(task.state);
+      handleClose();
+    });
+  };
 
   useEffect(() => loadBoard(), []);
   useEffect(() => generateBoard(), [boardCards]);

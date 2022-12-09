@@ -2,17 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { has } from 'ramda';
 
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
+import { Button, Card, CardActions, CardContent, CardHeader, IconButton, Modal, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
-
-import TaskForm from '../../form/TaskForm';
+import TaskForm from 'forms/TaskForm';
 
 import useStyles from './styles';
 
