@@ -54,11 +54,11 @@ export default {
     return axios.post(url, body).then(camelize);
   },
 
-  patch(url, json) {
+  put(url, json) {
     const body = decamelize(json);
 
     return axios
-      .patch(url, body)
+      .put(url, body)
       .then(camelize)
       .catch((err) => err.message);
   },

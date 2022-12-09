@@ -89,11 +89,12 @@ const TaskBoard = () => {
 
     return TasksRepository.update(task.id, { ...task, stateEvent: transition.event })
       .then(() => {
-        loadColumn(destination.toColumnId);
-        loadColumn(source.fromColumnId);
-        setBoard(moveCard(board, source, destination));
+        loadColumnInitial(destination.toColumnId);
+        loadColumnInitial(source.fromColumnId);
       })
       .catch((error) => {
+        console.log(destination.toColumnId);
+        console.log(source.fromColumnId);
         alert(`Move failed! ${error.message}`);
       });
   };
