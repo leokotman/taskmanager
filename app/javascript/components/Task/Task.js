@@ -1,17 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Card, CardHeader, CardContent, Typography } from '@mui/material';
+import { Card, CardHeader, CardContent, Typography, IconButton } from '@mui/material';
+import { Edit } from '@mui/icons-material';
 
 import useStyles from './styles';
 
 const Task = (props) => {
-  const { task } = props;
+  const { task, onClick } = props;
   const classes = useStyles();
+
+  const handleClick = () => onClick(task);
+
+  const action = (
+    <IconButton onClick={handleClick}>
+      <Edit />
+    </IconButton>
+  );
 
   return (
     <Card variant="outlined" className={classes.root}>
-      <CardHeader title={task.name} />
+      <CardHeader action={action} title={task.name} />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
           {task.description}
@@ -23,6 +32,7 @@ const Task = (props) => {
 
 Task.propTypes = {
   task: PropTypes.shape().isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Task;

@@ -7,7 +7,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import TaskForm from 'forms/TaskForm';
 import Task from 'components/Task';
 import AddPopup from 'components/AddPopup';
-// import EditPopup from 'components/EditPopup';
+import EditPopup from 'components/EditPopup';
 import ColumnHeader from 'components/ColumnHeader';
 import TasksRepository from 'repositories/TasksRepository';
 
@@ -25,12 +25,12 @@ const STATES = [
 const MODES = {
   ADD: 'add',
   NONE: 'none',
-  // EDIT: 'edit',
+  EDIT: 'edit',
 };
 
 const initialBoard = {
-  columns: STATES.map((column) => ({
-    id: column.key,
+  columns: STATES.map((column, key) => ({
+    id: key,
     title: column.value,
     cards: [],
     meta: {},
@@ -41,7 +41,7 @@ const TaskBoard = () => {
   const [board, setBoard] = useState(initialBoard);
   const [boardCards, setBoardCards] = useState([]);
   const [mode, setMode] = useState(MODES.NONE);
-  // const [openedTaskId, setOpenedTaskId] = useState(null);
+  const [openedTaskId, setOpenedTaskId] = useState(null);
   const styles = useStyles();
 
   const loadColumn = (state, page, perPage) =>
@@ -60,13 +60,9 @@ const TaskBoard = () => {
   };
   const loadColumnMore = (state, page = 1, perPage = 10) => {
     loadColumn(state, page, perPage).then(({ data }) => {
-      // console.log('data: ', data);
-      // console.log('page: ', page);
-      // console.log('perPage: ', perPage);
-      // console.log('boardCards[state]: ', boardCards[state]);
       setBoardCards((prevState) => ({
         ...prevState,
-        [state]: { cards: data.items, meta: data.meta },
+        [state]: { cards: [...prevState[state].cards, ...data.items], meta: data.meta },
       }));
     });
   };
@@ -130,33 +126,52 @@ const TaskBoard = () => {
     });
   };
 
+  const handleTaskDestroy = (task) => {
+    const attributes = TaskForm.attributesToSubmit(task);
+    TasksRepository.destroy(attributes.id)
+      .then(() => {
+        loadColumnInitial(task.state);
+        handleClose();
+      })
+      .catch((error) => {
+        alert(`Destrucion Failed! Error: ${error.message}`);
+      });
+  };
+
+  const handleEditPopupOpen = (task) => {
+    setOpenedTaskId(task.id);
+    setMode(MODES.EDIT);
+  };
+
   useEffect(() => loadBoard(), []);
   useEffect(() => generateBoard(), [boardCards]);
 
   return (
-    <div className={styles.root}>
-      <Board
-        onCardDragEnd={handleCardDragEnd}
-        renderColumnHeader={(column) => <ColumnHeader column={column} onLoadMore={loadColumnMore} />}
-        renderCard={(card) => <Task task={card} key={`${card.id}_${card.state}`} />}
-      >
-        {board}
-      </Board>
+    <React.StrictMode>
+      <div className={styles.root}>
+        <Board
+          onCardDragEnd={handleCardDragEnd}
+          renderColumnHeader={(column) => <ColumnHeader key={column.id} column={column} onLoadMore={loadColumnMore} />}
+          renderCard={(card) => <Task task={card} key={`${card.id}_${card.state}`} onClick={handleEditPopupOpen} />}
+        >
+          {board}
+        </Board>
 
-      <Fab onClick={handleAddPopupOpen} className={styles.addButton} color="primary" aria-label="add">
-        <AddRoundedIcon />
-      </Fab>
-      {mode === MODES.ADD && <AddPopup onCardCreate={handleTaskCreate} onClose={handleClose} />}
-      {/* {mode === MODES.EDIT && (
-        <EditPopup
-          onCardLoad={loadTask}
-          // onCardDestroy={handleTaskDestroy}
-          // onCardUpdate={handleTaskUpdate}
-          onClose={handleClose}
-          cardId={openedTaskId}
-        />
-      )} */}
-    </div>
+        <Fab onClick={handleAddPopupOpen} className={styles.addButton} color="primary" aria-label="add">
+          <AddRoundedIcon />
+        </Fab>
+        {mode === MODES.ADD && <AddPopup onCardCreate={handleTaskCreate} onClose={handleClose} />}
+        {mode === MODES.EDIT && (
+          <EditPopup
+            onCardLoad={loadTask}
+            onCardDestroy={handleTaskDestroy}
+            onCardUpdate={handleTaskUpdate}
+            onClose={handleClose}
+            cardId={openedTaskId}
+          />
+        )}
+      </div>
+    </React.StrictMode>
   );
 };
 

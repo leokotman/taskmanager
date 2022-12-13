@@ -24,6 +24,6 @@ export default {
 
   destroy(id) {
     const path = apiV1TaskPath(id);
-    return FetchHelper.delete(path, id);
+    return FetchHelper.delete(path);
   },
 };
