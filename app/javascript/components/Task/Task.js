@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { isNil } from 'ramda';
 
 import { Card, CardHeader, CardContent, Typography, IconButton } from '@mui/material';
 import { Edit } from '@mui/icons-material';
@@ -25,6 +26,12 @@ const Task = (props) => {
         <Typography variant="body2" color="textSecondary" component="p">
           {task.description}
         </Typography>
+        {!isNil(task.assignee) && (
+          <Typography variant="body2" color="textSecondary" component="p">
+            Assignee:
+            {`${task.assignee.firstName} ${task.assignee.lastName}`}
+          </Typography>
+        )}
       </CardContent>
     </Card>
   );

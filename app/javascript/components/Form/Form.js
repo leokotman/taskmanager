@@ -4,12 +4,14 @@ import { has } from 'ramda';
 
 import TextField from '@mui/material/TextField';
 
+import UserSelect from 'components/UserSelect';
 import useStyles from './styles';
 
 const Form = (props) => {
   const { errors, onChange, task } = props;
-  const handleChangeTextField = (fieldName) => (event) => onChange({ ...task, [fieldName]: event.target.value });
   const styles = useStyles();
+  const handleChangeTextField = (fieldName) => (event) => onChange({ ...task, [fieldName]: event.target.value });
+  const handleChangeSelect = (fieldName) => (user) => onChange({ ...task, [fieldName]: user });
 
   return (
     <form className={styles.root}>
@@ -31,6 +33,24 @@ const Form = (props) => {
         required
         multiline
         margin="dense"
+      />
+      <UserSelect
+        label="Author"
+        value={task.author}
+        onChange={handleChangeSelect('author')}
+        helperText={errors.author}
+        error={has('author', errors)}
+        isRequired
+        isClearable
+      />
+      <UserSelect
+        label="Assignee"
+        value={task.assignee}
+        onChange={handleChangeSelect('assignee')}
+        helperText={errors.assignee}
+        error={has('assignee', errors)}
+        isRequired
+        isClearable
       />
     </form>
   );
