@@ -17,8 +17,8 @@ end
 
 10.times do |i|
   t = Task.new
-  t.name = 'Test task'
-  t.description = 'Test task description'
+  t.name = "Test task #{i}"
+  t.description = "Test task #{i} description"
   t.author = admin
   t.save
 end
