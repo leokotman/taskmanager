@@ -34,7 +34,7 @@ class Api::V1::TasksController < Api::V1::ApplicationController
     task = Task.find(params[:id])
     task.destroy
 
-    respond_with(task)
+    head :ok
   end
 
   private

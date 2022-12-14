@@ -43,7 +43,7 @@
     "import/prefer-default-export": ["off"],
     "import/extensions": ["off"],
     "react/no-array-index-key": ["off"],
-    "filenames/match-exported": 2,
+    "filenames/match-exported": 0,
     "react/prop-types": [
       2,
       {
@@ -53,7 +53,7 @@
     "no-debugger": 1,
     "react/destructuring-assignment": 0,
     "react/static-property-placement": 0,
-    "react/function-component-definition": ["enabled", { "namedComponents": "arrow-function" }],
+    "react/function-component-definition": [1, { "namedComponents": "arrow-function" }],
     "max-len": [
       "warn",
       {
