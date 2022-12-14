@@ -5,6 +5,7 @@ import { isNil } from 'ramda';
 import { Card, CardHeader, CardContent, Typography, IconButton } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 
+import TaskPresenter from 'presenters/TaskPresenter';
 import useStyles from './styles';
 
 const Task = (props) => {
@@ -29,7 +30,7 @@ const Task = (props) => {
         {!isNil(task.assignee) && (
           <Typography variant="body2" color="textSecondary" component="p">
             Assignee:
-            {`${task.assignee.firstName} ${task.assignee.lastName}`}
+            {TaskPresenter.assigneefullName(task.assignee)}
           </Typography>
         )}
       </CardContent>
@@ -38,7 +39,7 @@ const Task = (props) => {
 };
 
 Task.propTypes = {
-  task: PropTypes.shape().isRequired,
+  task: TaskPresenter.shape().isRequired,
   onClick: PropTypes.func.isRequired,
 };
 

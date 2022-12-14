@@ -5,6 +5,7 @@ import AsyncSelect from 'react-select/async';
 import { FormControl, FormHelperText, InputLabel } from '@mui/material';
 
 import UsersRepository from 'repositories/UsersRepository';
+import UserPresenter from 'presenters/UserPresenter';
 
 import useStyles from './styles';
 
@@ -22,7 +23,7 @@ const UserSelect = ({ error, label, isClearable, isDisabled, isRequired, onChang
           cacheOptions
           loadOptions={handleLoadOptions}
           defaultOptions
-          getOptionLabel={(user) => `${user.firstName} ${user.lastName}`}
+          getOptionLabel={(user) => UserPresenter.fullName(user)}
           getOptionValue={(user) => user.id}
           isDisabled={isDisabled}
           isClearable={isClearable}
@@ -42,7 +43,7 @@ const UserSelect = ({ error, label, isClearable, isDisabled, isRequired, onChang
 UserSelect.propTypes = {
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.shape(),
+  value: UserPresenter.shape(),
   helperText: PropTypes.string,
   error: PropTypes.bool,
   isClearable: PropTypes.bool,
