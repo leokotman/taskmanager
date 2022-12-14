@@ -6,18 +6,21 @@ import Close from '@mui/icons-material/Close';
 
 import TaskPresenter from 'presenters/TaskPresenter';
 import Form from 'components/Form';
+import TaskPresenter from 'presenters/TaskPresenter';
 
 import useStyles from './styles';
 
 const EditPopup = (props) => {
-  const { cardId, onClose, onCardDestroy, onCardLoad, onCardUpdate } = props;
-  const [task, setTask] = useState(null);
+  const { cardId, onClose, onCardDestroy, onCardLoad, onCardUpdate, task, setTask } = props;
   const [isSaving, setSaving] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const styles = useStyles();
 
   useEffect(() => {
-    onCardLoad(cardId).then(setTask);
+    onCardLoad(cardId);
+    setLoading(isNil(task));
+    console.log(task);
   }, []);
 
   const handleCardUpdate = () => {
@@ -36,7 +39,7 @@ const EditPopup = (props) => {
     setSaving(true);
     onCardDestroy(task);
   };
-  const isLoading = isNil(task);
+  console.log(task);
 
   return (
     <Modal className={styles.modal} open onClose={onClose}>
@@ -93,6 +96,8 @@ EditPopup.propTypes = {
   onCardDestroy: PropTypes.func.isRequired,
   onCardLoad: PropTypes.func.isRequired,
   onCardUpdate: PropTypes.func.isRequired,
+  task: TaskPresenter.shape().isRequired,
+  setTask: PropTypes.func.isRequired,
 };
 
 export default EditPopup;
