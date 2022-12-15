@@ -6,6 +6,7 @@ import { Card, CardHeader, CardContent, Typography, IconButton } from '@mui/mate
 import { Edit } from '@mui/icons-material';
 
 import TaskPresenter from 'presenters/TaskPresenter';
+import UserPresenter from 'presenters/UserPresenter';
 import useStyles from './styles';
 
 const Task = (props) => {
@@ -22,15 +23,15 @@ const Task = (props) => {
 
   return (
     <Card variant="outlined" className={classes.root}>
-      <CardHeader action={action} title={task.name} />
+      <CardHeader action={action} title={TaskPresenter.name(task)} />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          {task.description}
+          {TaskPresenter.description(task)}
         </Typography>
-        {!isNil(task.assignee) && (
+        {!isNil(TaskPresenter.assignee(task)) && (
           <Typography variant="body2" color="textSecondary" component="p">
             Assignee:
-            {TaskPresenter.assigneefullName(task.assignee)}
+            {UserPresenter.fullName(TaskPresenter.assignee(task))}
           </Typography>
         )}
       </CardContent>
