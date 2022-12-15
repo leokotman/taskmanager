@@ -46,11 +46,12 @@ const TaskBoard = () => {
   const handleCardDragEnd = () => {
     dragCard();
   };
-  const handleTaskCreate = (params) => {
-    const attributes = TaskForm.attributesToSubmit(params);
-    createTask(attributes);
+  const handleTaskCreate = (task) => {
+    const attributes = TaskForm.attributesToSubmit(task);
     handleClose();
+    return createTask(attributes);
   };
+
   const handleTaskLoad = () => {
     console.log(openedTaskId);
     return loadTask(openedTaskId);

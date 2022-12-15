@@ -69,7 +69,6 @@ export const useTasksActions = () => {
   const createTask = (attributes) =>
     TasksRepository.create(attributes)
       .then(({ data: { task } }) => {
-        console.log('task created');
         loadColumn(task.state);
       })
       .catch((err) => {
