@@ -39,7 +39,6 @@ const EditPopup = (props) => {
     setSaving(true);
     return onCardDestroy(task);
   };
-  console.log(task);
   const isLoading = isNil(task);
 
   return (

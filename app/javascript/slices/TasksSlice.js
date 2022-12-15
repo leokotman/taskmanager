@@ -88,7 +88,6 @@ export const useTasksActions = () => {
       });
 
   const loadMoreTasks = (state, page = 1, perPage = 10) => {
-    console.log('loadMoreTasks in slice');
     TasksRepository.index({
       q: { stateEq: state },
       page,
@@ -98,8 +97,19 @@ export const useTasksActions = () => {
     });
   };
 
-  const dragCard = () => {
-    console.log('card dragged');
+  const dragCard = (task, source, destination) => {
+    const transition = task.transitions.find(({ to }) => destination.toColumnId === to);
+    if (!transition) {
+      return null;
+    }
+    return TasksRepository.update(task.id, { task: { stateEvent: transition.event } })
+      .then(() => {
+        loadColumn(destination.toColumnId);
+        loadColumn(source.fromColumnId);
+      })
+      .catch((error) => {
+        alert(`Move failed! ${error.message}`);
+      });
   };
 
   return {

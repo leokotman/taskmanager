@@ -43,8 +43,8 @@ const TaskBoard = () => {
     setOpenedTaskId(null);
   };
 
-  const handleCardDragEnd = () => {
-    dragCard();
+  const handleCardDragEnd = (task, source, destination) => {
+    dragCard(task, source, destination);
   };
   const handleTaskCreate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
@@ -52,10 +52,7 @@ const TaskBoard = () => {
     return createTask(attributes);
   };
 
-  const handleTaskLoad = () => {
-    console.log(openedTaskId);
-    return loadTask(openedTaskId);
-  };
+  const handleTaskLoad = () => loadTask(openedTaskId);
 
   const handleTaskUpdate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
