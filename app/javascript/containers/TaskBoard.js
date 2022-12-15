@@ -23,7 +23,6 @@ const TaskBoard = () => {
   const { board, loadBoard, loadMoreTasks, loadTask, createTask, updateTask, destroyTask, dragCard } = useTasks();
   const [mode, setMode] = useState(MODES.NONE);
   const [openedTaskId, setOpenedTaskId] = useState(null);
-  const [task, setTask] = useState(null);
   const styles = useStyles();
 
   useEffect(() => {
@@ -35,7 +34,6 @@ const TaskBoard = () => {
   };
 
   const handleOpenEditPopup = (card) => {
-    setTask(card);
     setOpenedTaskId(card.id);
     setMode(MODES.EDIT);
   };
@@ -55,14 +53,13 @@ const TaskBoard = () => {
   };
   const handleTaskLoad = () => {
     console.log(openedTaskId);
-    setTask(loadTask(openedTaskId));
-    console.log(task);
+    return loadTask(openedTaskId);
   };
   const handleTaskUpdate = () => {
     updateTask();
     handleClose();
   };
-  const handleTaskDestroy = () => {
+  const handleTaskDestroy = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
     destroyTask(attributes);
   };
@@ -94,8 +91,6 @@ const TaskBoard = () => {
           onCardUpdate={handleTaskUpdate}
           onClose={handleClose}
           cardId={openedTaskId}
-          task={task}
-          setTask={setTask}
         />
       )}
     </>

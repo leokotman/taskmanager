@@ -11,15 +11,17 @@ import TaskPresenter from 'presenters/TaskPresenter';
 import useStyles from './styles';
 
 const EditPopup = (props) => {
-  const { cardId, onClose, onCardDestroy, onCardLoad, onCardUpdate, task, setTask } = props;
+  const { cardId, onClose, onCardDestroy, onCardLoad, onCardUpdate } = props;
   const [isSaving, setSaving] = useState(false);
-  const [isLoading, setLoading] = useState(false);
+
+  const [task, setTask] = useState(null);
   const [errors, setErrors] = useState({});
   const styles = useStyles();
 
   useEffect(() => {
-    onCardLoad(cardId);
-    setLoading(isNil(task));
+    onCardLoad(cardId).then((res) => {
+      setTask(res);
+    });
     console.log(task);
   }, []);
 
@@ -40,6 +42,7 @@ const EditPopup = (props) => {
     onCardDestroy(task);
   };
   console.log(task);
+  const isLoading = isNil(task);
 
   return (
     <Modal className={styles.modal} open onClose={onClose}>
@@ -96,8 +99,6 @@ EditPopup.propTypes = {
   onCardDestroy: PropTypes.func.isRequired,
   onCardLoad: PropTypes.func.isRequired,
   onCardUpdate: PropTypes.func.isRequired,
-  task: TaskPresenter.shape().isRequired,
-  setTask: PropTypes.func.isRequired,
 };
 
 export default EditPopup;

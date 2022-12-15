@@ -64,10 +64,7 @@ export const useTasksActions = () => {
 
   const loadBoard = () => Promise.all(STATES.map(({ key }) => loadColumn(key)));
 
-  const loadTask = (id) => {
-    TasksRepository.show(id).then(({ data: { task } }) => task);
-    console.log('task loaded');
-  };
+  const loadTask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
 
   const createTask = (attributes) =>
     TasksRepository.create(attributes)
