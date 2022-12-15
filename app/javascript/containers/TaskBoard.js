@@ -55,9 +55,11 @@ const TaskBoard = () => {
     console.log(openedTaskId);
     return loadTask(openedTaskId);
   };
-  const handleTaskUpdate = () => {
-    updateTask();
+
+  const handleTaskUpdate = (task) => {
+    const attributes = TaskForm.attributesToSubmit(task);
     handleClose();
+    return updateTask(task, attributes);
   };
   const handleTaskDestroy = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);

@@ -76,9 +76,8 @@ export const useTasksActions = () => {
         console.log(err);
       });
 
-  const updateTask = () => {
-    console.log('task updated');
-  };
+  const updateTask = (task, attributes) =>
+    TasksRepository.update(task.id, attributes).then(() => loadColumn(task.state));
 
   const destroyTask = (attributes) => {
     TasksRepository.destroy(attributes.id)

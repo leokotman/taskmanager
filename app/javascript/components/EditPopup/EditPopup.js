@@ -6,7 +6,6 @@ import Close from '@mui/icons-material/Close';
 
 import TaskPresenter from 'presenters/TaskPresenter';
 import Form from 'components/Form';
-import TaskPresenter from 'presenters/TaskPresenter';
 
 import useStyles from './styles';
 
@@ -22,7 +21,6 @@ const EditPopup = (props) => {
     onCardLoad(cardId).then((res) => {
       setTask(res);
     });
-    console.log(task);
   }, []);
 
   const handleCardUpdate = () => {
