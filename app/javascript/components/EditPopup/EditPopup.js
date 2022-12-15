@@ -4,6 +4,7 @@ import { isNil } from 'ramda';
 import { Button, Card, CardActions, CardContent, CardHeader, CircularProgress, IconButton, Modal } from '@mui/material';
 import Close from '@mui/icons-material/Close';
 
+import TaskPresenter from 'presenters/TaskPresenter';
 import Form from 'components/Form';
 
 import useStyles from './styles';
@@ -46,7 +47,11 @@ const EditPopup = (props) => {
               <Close />
             </IconButton>
           }
-          title={isLoading ? 'Your task is loading. Please be patient.' : `Task # ${task.id} [${task.name}]`}
+          title={
+            isLoading
+              ? 'Your task is loading. Please be patient.'
+              : `Task # ${TaskPresenter.id(task)} [${TaskPresenter.name(task)}]`
+          }
         />
         <CardContent>
           {isLoading ? (

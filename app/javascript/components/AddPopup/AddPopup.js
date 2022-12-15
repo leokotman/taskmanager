@@ -5,6 +5,7 @@ import { has } from 'ramda';
 import { Button, Card, CardActions, CardContent, CardHeader, IconButton, Modal, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import TaskForm from 'forms/TaskForm';
+import TaskPresenter from 'presenters/TaskPresenter';
 
 import useStyles from './styles';
 
@@ -47,7 +48,7 @@ const AddPopup = (props) => {
               error={has('name', errors)}
               helperText={errors.name}
               onChange={handleChangeTextField('name')}
-              value={task.name}
+              value={TaskPresenter.name(task)}
               label="Name"
               required
               margin="dense"
@@ -56,7 +57,7 @@ const AddPopup = (props) => {
               error={has('description', errors)}
               helperText={errors.description}
               onChange={handleChangeTextField('description')}
-              value={task.description}
+              value={TaskPresenter.description(task)}
               label="Description"
               required
               margin="dense"

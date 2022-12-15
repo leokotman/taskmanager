@@ -4,12 +4,15 @@ import { has } from 'ramda';
 
 import TextField from '@mui/material/TextField';
 
+import TaskPresenter from 'presenters/TaskPresenter';
+import UserSelect from 'components/UserSelect';
 import useStyles from './styles';
 
 const Form = (props) => {
   const { errors, onChange, task } = props;
-  const handleChangeTextField = (fieldName) => (event) => onChange({ ...task, [fieldName]: event.target.value });
   const styles = useStyles();
+  const handleChangeTextField = (fieldName) => (event) => onChange({ ...task, [fieldName]: event.target.value });
+  const handleChangeSelect = (fieldName) => (user) => onChange({ ...task, [fieldName]: user });
 
   return (
     <form className={styles.root}>
@@ -17,7 +20,7 @@ const Form = (props) => {
         error={has('name', errors)}
         helperText={errors.name}
         onChange={handleChangeTextField('name')}
-        value={task.name}
+        value={TaskPresenter.name(task)}
         label="Name"
         required
         margin="dense"
@@ -26,11 +29,29 @@ const Form = (props) => {
         error={has('description', errors)}
         helperText={errors.description}
         onChange={handleChangeTextField('description')}
-        value={task.description}
+        value={TaskPresenter.description(task)}
         label="Description"
         required
         multiline
         margin="dense"
+      />
+      <UserSelect
+        label="Author"
+        value={TaskPresenter.author(task)}
+        onChange={handleChangeSelect('author')}
+        helperText={errors.author}
+        error={has('author', errors)}
+        isRequired
+        isClearable
+      />
+      <UserSelect
+        label="Assignee"
+        value={TaskPresenter.assignee(task)}
+        onChange={handleChangeSelect('assignee')}
+        helperText={errors.assignee}
+        error={has('assignee', errors)}
+        isRequired
+        isClearable
       />
     </form>
   );
@@ -38,7 +59,7 @@ const Form = (props) => {
 
 Form.propTypes = {
   onChange: PropTypes.func.isRequired,
-  task: PropTypes.shape().isRequired,
+  task: TaskPresenter.shape().isRequired,
   errors: PropTypes.shape({
     name: PropTypes.arrayOf(PropTypes.string),
     description: PropTypes.arrayOf(PropTypes.string),
