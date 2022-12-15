@@ -79,16 +79,14 @@ export const useTasksActions = () => {
   const updateTask = (task, attributes) =>
     TasksRepository.update(task.id, attributes).then(() => loadColumn(task.state));
 
-  const destroyTask = (attributes) => {
+  const destroyTask = (task, attributes) =>
     TasksRepository.destroy(attributes.id)
-      .then(({ data: { task } }) => {
+      .then(() => {
         loadColumn(task.state);
-        console.log('task destroyed');
       })
       .catch((error) => {
         alert(`Destrucion Failed! Error: ${error.message}`);
       });
-  };
 
   const loadMoreTasks = (state, page = 1, perPage = 10) => {
     console.log('loadMoreTasks in slice');

@@ -63,7 +63,8 @@ const TaskBoard = () => {
   };
   const handleTaskDestroy = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
-    destroyTask(attributes);
+    handleClose();
+    return destroyTask(task, attributes);
   };
   const loadColumnMore = (state, page = 1, perPage = 10) => {
     loadMoreTasks(state, page, perPage);
