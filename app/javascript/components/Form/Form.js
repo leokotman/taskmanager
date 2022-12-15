@@ -4,6 +4,7 @@ import { has } from 'ramda';
 
 import TextField from '@mui/material/TextField';
 
+import TaskPresenter from 'presenters/TaskPresenter';
 import UserSelect from 'components/UserSelect';
 import useStyles from './styles';
 
@@ -19,7 +20,7 @@ const Form = (props) => {
         error={has('name', errors)}
         helperText={errors.name}
         onChange={handleChangeTextField('name')}
-        value={task.name}
+        value={TaskPresenter.name(task)}
         label="Name"
         required
         margin="dense"
@@ -28,7 +29,7 @@ const Form = (props) => {
         error={has('description', errors)}
         helperText={errors.description}
         onChange={handleChangeTextField('description')}
-        value={task.description}
+        value={TaskPresenter.description(task)}
         label="Description"
         required
         multiline
@@ -36,7 +37,7 @@ const Form = (props) => {
       />
       <UserSelect
         label="Author"
-        value={task.author}
+        value={TaskPresenter.author(task)}
         onChange={handleChangeSelect('author')}
         helperText={errors.author}
         error={has('author', errors)}
@@ -45,7 +46,7 @@ const Form = (props) => {
       />
       <UserSelect
         label="Assignee"
-        value={task.assignee}
+        value={TaskPresenter.assignee(task)}
         onChange={handleChangeSelect('assignee')}
         helperText={errors.assignee}
         error={has('assignee', errors)}
@@ -58,7 +59,7 @@ const Form = (props) => {
 
 Form.propTypes = {
   onChange: PropTypes.func.isRequired,
-  task: PropTypes.shape().isRequired,
+  task: TaskPresenter.shape().isRequired,
   errors: PropTypes.shape({
     name: PropTypes.arrayOf(PropTypes.string),
     description: PropTypes.arrayOf(PropTypes.string),
