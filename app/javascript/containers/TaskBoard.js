@@ -12,7 +12,6 @@ import ColumnHeader from 'components/ColumnHeader';
 import useTasks from 'hooks/store/useTasks';
 
 import useStyles from './styles';
-import { isNil } from 'ramda';
 
 const MODES = {
   ADD: 'add',
@@ -44,9 +43,7 @@ const TaskBoard = () => {
     setOpenedTaskId(null);
   };
 
-  const handleCardDragEnd = (task, source, destination) => {
-    if (isNil(dragCard(task, source, destination))) console.log("Can't drag card to this column");
-  };
+  const handleCardDragEnd = (task, source, destination) => dragCard(task, source, destination);
 
   const handleTaskCreate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
