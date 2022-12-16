@@ -50,37 +50,18 @@ const TaskBoard = () => {
 
   const handleTaskCreate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
-    try {
-      return createTask(attributes);
-    } catch (error) {
-      return console.log(error.description);
-    } finally {
-      handleClose();
-    }
+    return createTask(attributes).then(handleClose());
   };
 
   const handleTaskLoad = () => loadTask(openedTaskId);
 
   const handleTaskUpdate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
-    try {
-      return updateTask(task, attributes);
-    } catch (error) {
-      return console.log(error.description);
-    } finally {
-      handleClose();
-    }
+    return updateTask(task, attributes).then(handleClose());
   };
 
-  const handleTaskDestroy = (task) => {
-    try {
-      return destroyTask(task);
-    } catch (error) {
-      return console.log(error.description);
-    } finally {
-      handleClose();
-    }
-  };
+  const handleTaskDestroy = (task) => destroyTask(task).then(handleClose());
+
   const loadColumnMore = (state, page = 1, perPage = 10) => {
     loadMoreTasks(state, page, perPage);
   };

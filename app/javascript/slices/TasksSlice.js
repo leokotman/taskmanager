@@ -67,19 +67,15 @@ export const useTasksActions = () => {
   const loadTask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
 
   const createTask = (attributes) =>
-    TasksRepository.create(attributes)
-      .then(({ data: { task } }) => loadColumn(task.state))
-      .catch((err) => err);
+    TasksRepository.create(attributes).then(({ data: { task } }) => loadColumn(task.state));
 
   const updateTask = (task, attributes) =>
     TasksRepository.update(task.id, attributes).then(() => loadColumn(task.state));
 
   const destroyTask = (task) =>
-    TasksRepository.destroy(task.id)
-      .then(() => {
-        loadColumn(task.state);
-      })
-      .catch((err) => err);
+    TasksRepository.destroy(task.id).then(() => {
+      loadColumn(task.state);
+    });
 
   const loadMoreTasks = (state, page = 1, perPage = 10) => {
     TasksRepository.index({
@@ -96,12 +92,10 @@ export const useTasksActions = () => {
     if (!transition) {
       return null;
     }
-    return TasksRepository.update(task.id, { task: { stateEvent: transition.event } })
-      .then(() => {
-        loadColumn(destination.toColumnId);
-        loadColumn(source.fromColumnId);
-      })
-      .catch((err) => err);
+    return TasksRepository.update(task.id, { task: { stateEvent: transition.event } }).then(() => {
+      loadColumn(destination.toColumnId);
+      loadColumn(source.fromColumnId);
+    });
   };
 
   return {
