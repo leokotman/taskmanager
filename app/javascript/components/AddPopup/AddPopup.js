@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { has } from 'ramda';
+import { has, isEmpty } from 'ramda';
 
-import { Button, Card, CardActions, CardContent, CardHeader, IconButton, Modal, TextField } from '@mui/material';
+import { Button, Card, CardContent, CardHeader, IconButton, Modal, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import TaskForm from 'forms/TaskForm';
 import TaskPresenter from 'presenters/TaskPresenter';
@@ -17,17 +17,17 @@ const AddPopup = (props) => {
 
   const styles = useStyles();
 
-  const handleCreate = () => {
-    setSaving(true);
+  const handleCreate = (e) => {
+    e.preventDefault();
+    if (!isEmpty(task.name) && !isEmpty(task.description)) {
+      setSaving(true);
 
-    onCardCreate(task).catch((error) => {
-      setSaving(false);
-      setErrors(error || {});
-
-      if (error instanceof Error) {
+      onCardCreate(task).catch((error) => {
+        setSaving(false);
+        setErrors(error || {});
         alert(`Creation Failed! Error: ${error.message}`);
-      }
-    });
+      });
+    }
   };
   const handleChangeTextField = (fieldName) => (event) => changeTask({ ...task, [fieldName]: event.target.value });
 
@@ -43,8 +43,9 @@ const AddPopup = (props) => {
           title="Add New Task"
         />
         <CardContent>
-          <div className={styles.form}>
+          <form className={styles.form} onSubmit={handleCreate}>
             <TextField
+              name="Name"
               error={has('name', errors)}
               helperText={errors.name}
               onChange={handleChangeTextField('name')}
@@ -54,6 +55,7 @@ const AddPopup = (props) => {
               margin="dense"
             />
             <TextField
+              name="Description"
               error={has('description', errors)}
               helperText={errors.description}
               onChange={handleChangeTextField('description')}
@@ -62,13 +64,11 @@ const AddPopup = (props) => {
               required
               margin="dense"
             />
-          </div>
+            <Button disabled={isSaving} type="submit" variant="contained" size="small" color="primary">
+              Add
+            </Button>
+          </form>
         </CardContent>
-        <CardActions className={styles.actions}>
-          <Button disabled={isSaving} onClick={handleCreate} variant="contained" size="small" color="primary">
-            Add
-          </Button>
-        </CardActions>
       </Card>
     </Modal>
   );

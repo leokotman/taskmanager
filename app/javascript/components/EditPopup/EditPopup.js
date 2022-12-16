@@ -34,7 +34,7 @@ const EditPopup = (props) => {
 
   const handleCardDestroy = () => {
     setSaving(true);
-    onCardDestroy(task);
+    onCardDestroy(task).catch((err) => alert(`Destrucion Failed! Error: ${err.message}`));
   };
   const isLoading = isNil(task);
 
