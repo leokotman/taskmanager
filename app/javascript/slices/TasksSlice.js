@@ -68,24 +68,18 @@ export const useTasksActions = () => {
 
   const createTask = (attributes) =>
     TasksRepository.create(attributes)
-      .then(({ data: { task } }) => {
-        loadColumn(task.state);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then(({ data: { task } }) => loadColumn(task.state))
+      .catch((err) => err);
 
   const updateTask = (task, attributes) =>
     TasksRepository.update(task.id, attributes).then(() => loadColumn(task.state));
 
-  const destroyTask = (task, attributes) =>
-    TasksRepository.destroy(attributes.id)
+  const destroyTask = (task) =>
+    TasksRepository.destroy(task.id)
       .then(() => {
         loadColumn(task.state);
       })
-      .catch((error) => {
-        alert(`Destrucion Failed! Error: ${error.message}`);
-      });
+      .catch((err) => err);
 
   const loadMoreTasks = (state, page = 1, perPage = 10) => {
     TasksRepository.index({
@@ -107,9 +101,7 @@ export const useTasksActions = () => {
         loadColumn(destination.toColumnId);
         loadColumn(source.fromColumnId);
       })
-      .catch((error) => {
-        alert(`Move failed! ${error.message}`);
-      });
+      .catch((err) => err);
   };
 
   return {

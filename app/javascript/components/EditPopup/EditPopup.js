@@ -11,16 +11,13 @@ import useStyles from './styles';
 
 const EditPopup = (props) => {
   const { cardId, onClose, onCardDestroy, onCardLoad, onCardUpdate } = props;
-  const [isSaving, setSaving] = useState(false);
-
   const [task, setTask] = useState(null);
+  const [isSaving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
   const styles = useStyles();
 
   useEffect(() => {
-    onCardLoad(cardId).then((res) => {
-      setTask(res);
-    });
+    onCardLoad(cardId).then(setTask);
   }, []);
 
   const handleCardUpdate = () => {
@@ -37,7 +34,7 @@ const EditPopup = (props) => {
 
   const handleCardDestroy = () => {
     setSaving(true);
-    return onCardDestroy(task);
+    onCardDestroy(task).catch((err) => alert(`Destrucion Failed! Error: ${err.message}`));
   };
   const isLoading = isNil(task);
 

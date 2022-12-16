@@ -12,6 +12,7 @@ import ColumnHeader from 'components/ColumnHeader';
 import useTasks from 'hooks/store/useTasks';
 
 import useStyles from './styles';
+import { isNil } from 'ramda';
 
 const MODES = {
   ADD: 'add',
@@ -44,25 +45,41 @@ const TaskBoard = () => {
   };
 
   const handleCardDragEnd = (task, source, destination) => {
-    dragCard(task, source, destination);
+    if (isNil(dragCard(task, source, destination))) console.log("Can't drag card to this column");
   };
+
   const handleTaskCreate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
-    handleClose();
-    return createTask(attributes);
+    try {
+      return createTask(attributes);
+    } catch (error) {
+      return console.log(error.description);
+    } finally {
+      handleClose();
+    }
   };
 
   const handleTaskLoad = () => loadTask(openedTaskId);
 
   const handleTaskUpdate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
-    handleClose();
-    return updateTask(task, attributes);
+    try {
+      return updateTask(task, attributes);
+    } catch (error) {
+      return console.log(error.description);
+    } finally {
+      handleClose();
+    }
   };
+
   const handleTaskDestroy = (task) => {
-    const attributes = TaskForm.attributesToSubmit(task);
-    handleClose();
-    return destroyTask(task, attributes);
+    try {
+      return destroyTask(task);
+    } catch (error) {
+      return console.log(error.description);
+    } finally {
+      handleClose();
+    }
   };
   const loadColumnMore = (state, page = 1, perPage = 10) => {
     loadMoreTasks(state, page, perPage);
